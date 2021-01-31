@@ -88,7 +88,6 @@ public class MainWindow {
         } catch(Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     // create initial config with size and position
@@ -128,20 +127,13 @@ public class MainWindow {
 
             String xmlString = stringWriter.getBuffer().toString();
 
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(configFilename);
+            try (FileOutputStream fos = new FileOutputStream(configFilename)) {
                 byte[] xmlBytes = xmlString.getBytes();
                 fos.write(xmlBytes);
-            } finally {
-                if(fos != null) {
-                    fos.close();
-                }
             }
         } catch(Exception ex) {
             ex.printStackTrace();
             System.exit(0);
         }
-
     }
 }
