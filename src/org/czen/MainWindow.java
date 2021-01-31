@@ -2,6 +2,7 @@ package org.czen;
 
 import java.awt.*;
 import java.io.*;
+import java.util.Iterator;
 import javax.xml.stream.*;
 import javax.xml.stream.events.*;
 
@@ -31,9 +32,58 @@ public class MainWindow {
 
     // try to load the xml
     private void loadConfig() {
+        boolean windowHeight = false;
+        boolean windowWidth = false;
+        boolean windowPositionX = false;
+        boolean windowPositionY = false;
 
         try {
             XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+            XMLEventReader eventReader = xmlInputFactory.createXMLEventReader(new FileReader(configFilename));
+
+            while(eventReader.hasNext()) {
+                XMLEvent event = eventReader.nextEvent();
+
+                switch(event.getEventType()) {
+                    case XMLStreamConstants.START_ELEMENT:
+                        StartElement startElement = event.asStartElement();
+                        String qName = startElement.getName().getLocalPart();
+
+                        if(qName.equalsIgnoreCase("database")) continue;
+
+                        Iterator<Attribute> attributes = startElement.getAttributes();
+                        qName = attributes.next().getValue();
+
+                        if(qName.equalsIgnoreCase("windowHeight")) {
+                            windowHeight = true;
+                        } else if(qName.equalsIgnoreCase("windowWidth")) {
+                            windowWidth = true;
+                        } else if(qName.equalsIgnoreCase("windowPositionX")) {
+                            windowPositionX = true;
+                        } else if(qName.equalsIgnoreCase("windowPositionY")) {
+                            windowPositionY = true;
+                        }
+                        break;
+
+                    case XMLStreamConstants.CHARACTERS:
+                        Characters characters = event.asCharacters();
+
+                        if(windowHeight) {
+                            windowHeight = false;
+                            this.windowHeight = Integer.parseInt(characters.getData());
+                        } else if(windowWidth) {
+                            windowWidth = false;
+                            this.windowWidth = Integer.parseInt(characters.getData());
+                        } else if(windowPositionX) {
+                            windowPositionX = false;
+                            this.windowPositionX = Integer.parseInt(characters.getData());
+                        } else if (windowPositionY) {
+                            windowPositionY = false;
+                            this.windowPositionY = Integer.parseInt(characters.getData());
+                        }
+                        break;
+                }
+            }
 
         } catch(Exception ex) {
             ex.printStackTrace();
