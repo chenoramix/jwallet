@@ -15,6 +15,7 @@ public class MainWindow {
 
     public MainWindow() {
         configFilename = "jwallet.xml";
+        
         File confFile = new File(configFilename);
 
         if(!confFile.exists()) {
