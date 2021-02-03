@@ -27,5 +27,7 @@ public class MainWindow extends JFrame {
         }
 
         configFile.loadConfig();
+
+        CreateDatabase dbConfig = new CreateDatabase();
     }
 }

@@ -94,7 +94,7 @@ public class CreateLoadConfig {
         return windowWidth;
     }
 
-    public int getPositionX() {
+    public int getWindowPositionX() {
         return windowPositionX;
     }
 
